@@ -7,8 +7,7 @@ import * as path from "path";
 export async function get(): Promise<any[]> {
   return await new Promise((resolve, reject) => {
     const results: any[] = [];
-    console.log(__dirname);
-    fs.createReadStream(path.join(__dirname, "../public/dados.csv"))
+    fs.createReadStream(path.join(__dirname, "../../../public/dados.csv"))
       .pipe(csv())
       .on("data", (data) => results.push(data))
       .on("end", () => {

@@ -95,6 +95,11 @@ export const Chart = ({
 
   const options = {
     responsive: true,
+    scales: {
+      y: {
+        suggestedMax: 10,
+      },
+    },
     plugins: {
       legend: {
         position: "top" as const,

@@ -39,59 +39,33 @@ const chartColors: { [k: string]: any } = {
   },
 };
 
-const defaultFinances = { PPI: 0, FAEC: 0, "": 0 };
-const defaultYears = {
-  "2020": defaultFinances,
-  "2021": defaultFinances,
-  "2022": defaultFinances,
-  "2023": defaultFinances,
-};
+const years = ["2019", "2020", "2021"];
 
 export const Chart = ({
   data,
-  city,
+  area,
   type,
 }: {
-  data: any[];
-  city: string;
+  data: any;
+  area: string;
   type: string;
 }) => {
-  const formatedData = useMemo(() => {
-    const structured = data
-      .filter(
-        (item) =>
-          item["TIPO CIRURGIA "] === type &&
-          item["MUNICÍPIO DE ORIGEM"] === city
-      )
-      .reduce((acc, cur) => {
-        const year = cur["DATA DA CIRURGIA"].split("/").at(-1);
-        const funding = cur["FINANCIAMENTO"];
-
-        if (funding === "PROGRAMA ESTADUAL" || funding === "--") return acc;
-
-        const accYear = acc[year];
-        return {
-          ...acc,
-          [year]: {
-            ...accYear,
-            [funding]: accYear[funding] ? accYear[funding] + 1 : 1,
-          },
-        };
-      }, defaultYears);
-
-    return {
-      labels: Object.keys(structured),
-      datasets: Object.keys(structured["2021"]).map((finance, index) => ({
-        label: finance === "" ? "Não informado" : finance,
-        data: Object.keys(structured).map((year) => structured[year][finance]),
-        borderColor: chartColors[finance].borderColor,
-        backgroundColor: chartColors[finance].backgroundColor,
-      })),
-    };
-  }, [data, city, type]);
-
-  let title = `${city} - ${type}`.toLowerCase();
+  let title = `${area} - ${type}`.toLowerCase();
   title = title.replace(/(^|\s)\S/g, (l) => l.toUpperCase());
+
+  const formatedData = useMemo(() => {
+    return {
+      labels: years,
+      datasets: [
+        {
+          label: "",
+          data,
+          borderColor: "rgb(99, 190, 255)",
+          backgroundColor: "rgba(99, 190, 255, 0.5)",
+        },
+      ],
+    };
+  }, [data]);
 
   const options = {
     responsive: true,
